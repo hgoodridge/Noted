@@ -4,6 +4,8 @@ const path = require("path")
 const PORT = process.env.PORT|| 8080
 const app = express()
 const db = require("./db/db.json")
+const journal = require("./journal.json")
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
@@ -19,7 +21,7 @@ app.get("/api/notes", function (req, res) {
     res.json(db)
 })
 
-app.post("/api/notes", (req,res)=>{
+app.post("/notes", (req,res)=>{
     const newNote = req.body
     noteListItems.push(newNote)
     res.json(newNote)
