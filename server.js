@@ -27,10 +27,10 @@ app.get("/api/notes", function (req, res) {
 //api routes
 app.post("/api/notes", (req,res)=>{
     let id
-    if(db.length <0){
+    if(!db.length){
         id = 1
     }else{
-        id = db.length + 1
+        id = db[db.length-1].id + 1
     }
     const newNote = {
         id:id,
@@ -48,18 +48,20 @@ app.post("/api/notes", (req,res)=>{
 })
 app.delete("/api/notes/:id",(req,res)=>{
     var deletedNoteIndex
-    for(var i = 0; i < db.length;i++){
+    for(var i = 0; i < db.length; i++){
         if(db[i].id === req.params.id){
-            deletedNoteIndex = db[i].id -1
+            deletedNoteIndex = i
         }
         
     }
-    const newdb = db.splice(deletedNoteIndex, 1)
-    fs.writeFile("./db/db.json",JSON.stringify(newdb),function(err){
+    
+    db.splice(deletedNoteIndex, 1)
+    fs.writeFile("./db/db.json",JSON.stringify(db),function(err){
         if(err) throw err
     
     })
+    res.sendStatus(200)
 })
 app.listen(PORT,()=>{
-    console.log(`"live at http://localhost:${PORT}"`)
+    console.log(`live at http://localhost:${PORT}`)
 })
